@@ -22,6 +22,10 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    # ✅ Configure Buildx with a container driver to support GHA cache export
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     # ✅ Build avec le bon chemin Dockerfile (dans docker/)
     - name: Build the Docker image
       uses: docker/build-push-action@v6
@@ -30,8 +34,8 @@ jobs:
         file: ./docker/Dockerfile
         push: ${{ github.event_name != 'pull_request' }}
         tags: |
-          ghcr.io/${{ github.repository }}:${{ github.sha }}
-          ghcr.io/${{ github.repository }}:latest
+          ghcr.io/invenify/laraowl:${{ github.sha }}
+          ghcr.io/invenify/laraowl:latest
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
